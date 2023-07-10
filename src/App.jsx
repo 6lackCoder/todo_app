@@ -13,17 +13,40 @@ function App() {
 
 
 const addTodo = (e)=>{
-  e.preventDefault()
-  setTodos((prevTodo)=>
-    [...prevTodo, {item: todo, id: crypto.randomUUID()}]
+  e.preventDefault();
+  setTodos((prevTodo) => {
+    if (todo === "") return [...prevTodo];
+    return [...prevTodo, { item: todo, id: crypto.randomUUID() }];
+  });
+  
+  setTodo("");
+}
+
+const deleteTodo = (id)=>{
+  setTodos(()=>
+    todos.filter((item)=> item.id !== id)
   )
 }
+
+const editTodo = (id)=>{
+  setTodos(()=>
+    todos.map((content)=> {
+      if(content.id === id){
+        return {item: setTodo(content.item), id: id}
+      }
+     return content
+    }
+
+    )
+  )
+}
+
   return (
     <div className="App">
       <Header headerTitle={ 'TODO APP' } />
       <main className=' p-[5rem]'>
       <Form todo={todo} setTodo={setTodo} onSubmitTodo={addTodo} />
-      <Todos todos={todos}/>
+      <Todos todos={todos} onDelete={deleteTodo} onEdit={editTodo} />
       </main>
    
     </div>
